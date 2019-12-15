@@ -1,7 +1,7 @@
 # Simple2DParallax
 A basic parallax effect for Unity 2D.
 
-[![Demo](https://i.imgur.com/4vsAG8b.gif)](https://youtu.be/Im8eCi0pSss)
+[![Demo](https://i.imgur.com/WXzVLs5.gif)](https://youtu.be/Im8eCi0pSss)
 
 
 
