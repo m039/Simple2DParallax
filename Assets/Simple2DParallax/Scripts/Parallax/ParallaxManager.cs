@@ -2,6 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+#if UNITY_EDITOR
+
+using UnityEditor;
+
+#endif
+
 namespace m039.Parallax
 {
     public interface IParallaxManager
@@ -68,14 +75,16 @@ namespace m039.Parallax
 
                         _sInstance = obj.AddComponent<ParallaxManager>();
 
-                    } else if (managers == null || managers.Length != 1)
+                    }
+                    else if (managers == null || managers.Length != 1)
                     {
                         // Too many managers. Not supported.
 
                         Utils.LogError($"There is should be one {nameof(ParallaxManager)} in the scene.", ref _sErrorMessageShown);
-                        
+
                         return null;
-                    } else
+                    }
+                    else
                     {
                         // All ok.
 
@@ -86,7 +95,7 @@ namespace m039.Parallax
                 if (_sInstance == null)
                 {
                     Utils.LogError($"Can't find the {nameof(ParallaxManager)} in the scene", ref _sErrorMessageShown);
-                    
+
                     return null;
                 }
 
@@ -133,7 +142,8 @@ namespace m039.Parallax
                 if (referenceZTransform != null)
                 {
                     return referenceZTransform.transform.position.z;
-                } else
+                }
+                else
                 {
                     return referenceZ;
                 }
@@ -180,10 +190,12 @@ namespace m039.Parallax
             if (depthOrder > 0 && _currentMaxDepthOrder != 0)
             {
                 return ReferenceZ + (float)depthOrder / Mathf.Abs(_currentMaxDepthOrder) * MaxDepth;
-            } else if (depthOrder < 0 && _currentMinDepthOrder != 0)
+            }
+            else if (depthOrder < 0 && _currentMinDepthOrder != 0)
             {
                 return ReferenceZ + (float)depthOrder / Mathf.Abs(_currentMinDepthOrder) * MaxDepth;
-            } else
+            }
+            else
             {
                 return ReferenceZ;
             }
@@ -194,7 +206,8 @@ namespace m039.Parallax
             if (_followMode == FollowMode.Target && _followTarget != null)
             {
                 return _followTarget.transform.position;
-            } else
+            }
+            else
             {
                 return _followPosition;
             }
@@ -214,5 +227,42 @@ namespace m039.Parallax
 
         #endregion
     }
+
+
+#if UNITY_EDITOR
+
+    [CustomEditor(typeof(ParallaxManager), true)]
+    public class ParallaxManagerEditor : Editor {
+
+        public override void OnInspectorGUI()
+        {
+            serializedObject.Update();
+
+            var referenceZTransform = serializedObject.FindProperty(nameof(ParallaxManager.referenceZTransform));
+            var showReferenceZ = referenceZTransform == null || referenceZTransform.objectReferenceValue == null;
+
+            var iterator = serializedObject.GetIterator();
+
+            while (iterator.NextVisible(true))
+            {
+                var p = iterator;
+
+                if (p.name.Equals(nameof(ParallaxManager.referenceZ)) && !showReferenceZ) {
+                    var oldEnabled = GUI.enabled;
+                    GUI.enabled = false;
+                    EditorGUILayout.PropertyField(p);
+                    GUI.enabled = oldEnabled;
+                } else
+                {
+                    EditorGUILayout.PropertyField(p);
+                }
+            }
+
+            serializedObject.ApplyModifiedProperties();
+        }
+
+    }
+
+#endif
 
 }

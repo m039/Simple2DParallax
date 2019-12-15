@@ -683,6 +683,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   referenceSpeed: 10
+  referenceZ: 1
+  referenceZTransform: {fileID: 0}
+  useDepth: 1
 --- !u!1 &1602609631
 GameObject:
   m_ObjectHideFlags: 0

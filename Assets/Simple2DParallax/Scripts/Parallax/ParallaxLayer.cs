@@ -80,8 +80,8 @@ namespace m039.Parallax
                 _backgrounds.Add(obj);
             }
 
-            var width = Camera.main.orthographicSize * Camera.main.aspect;
-            var times = Mathf.CeilToInt(width / spriteRenderer.bounds.size.x) + 1;
+            var width = Camera.main.orthographicSize * 2 * Camera.main.aspect;
+            var times = Mathf.CeilToInt(width / (spriteRenderer.bounds.size.x)) + 1;
 
             for (int i = 1; i < times; i++)
             {
