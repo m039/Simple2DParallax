@@ -15,11 +15,34 @@ namespace m039.Parallax
 
         public int depthOrder = 0;
 
+        [Tooltip("Скорость с которой движется объект, на котурую влияет еще общая скорость параллакса.")]
+        public float horizontalSpeed = 0f;
+
         #endregion
+
+        Vector2 _lastPosition;
+
+        float _parallaxOffset;
 
         private void OnEnable()
         {
-            UpdateDepth();   
+            UpdateDepth();
+        }
+
+        private void Start()
+        {
+            if (ParallaxManager.Instance == null)
+                return;
+
+            _parallaxOffset = 0.0f;
+            _lastPosition = ParallaxManager.Instance.GetFollowPosition();
+
+            FollowPosition();
+        }
+
+        private void LateUpdate()
+        {
+            FollowPosition();
         }
 
         void UpdateDepth()
@@ -32,6 +55,27 @@ namespace m039.Parallax
             position.z = ParallaxManager.Instance.GetDepth(depthOrder);
 
             transform.position = position;
+        }
+
+        void FollowPosition()
+        {
+            if (ParallaxManager.Instance == null)
+                return;
+
+            var followPosition = ParallaxManager.Instance.GetFollowPosition();
+
+            // Update position of the object.
+
+            var deltaX = followPosition.x - _lastPosition.x;
+
+            _lastPosition = followPosition;
+            _parallaxOffset += deltaX * ParallaxManager.Instance.ReferenceSpeed * horizontalSpeed;
+
+            var p = transform.position;
+
+            p.x = followPosition.x + _parallaxOffset;
+
+            transform.position = p;
         }
     }
 

@@ -8,6 +8,10 @@ namespace m039.Parallax
     {
         Transform FollowTarget { get; set; }
 
+        float ReferenceSpeed { get; }
+
+        Vector2 GetFollowPosition();
+
         float GetDepth(int depthOrder);
     }
 
@@ -62,7 +66,10 @@ namespace m039.Parallax
 
         #region Inspector
 
-        public Transform FollowTarget;
+        public Transform followTarget;
+
+        [Tooltip("Общая скорость для всех объектов, использующие параллакс.")]
+        public float referenceSpeed = 2;
 
         #endregion
 
@@ -78,7 +85,7 @@ namespace m039.Parallax
 
         readonly List<ParallaxLayer> _layers = new List<ParallaxLayer>();
 
-        public bool _initialized = false;
+        bool _initialized = false;
 
         public void OnEnable()
         {
@@ -109,11 +116,13 @@ namespace m039.Parallax
 
         Transform IParallaxManager.FollowTarget { 
 
-            get => FollowTarget;
+            get => followTarget;
 
-            set => FollowTarget = value;
+            set => followTarget = value;
 
         }
+
+        float IParallaxManager.ReferenceSpeed => referenceSpeed;
 
         float IParallaxManager.GetDepth(int depthOrder)
         {
@@ -128,6 +137,17 @@ namespace m039.Parallax
             } else
             {
                 return CurrentDepth;
+            }
+        }
+
+        Vector2 IParallaxManager.GetFollowPosition()
+        {
+            if (followTarget != null)
+            {
+                return followTarget.position;
+            } else
+            {
+                return transform.position;
             }
         }
 
