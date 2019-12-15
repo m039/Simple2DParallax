@@ -6,7 +6,9 @@ namespace m039.Parallax
 {
     public interface IParallaxManager
     {
-        Transform FollowTarget { get; set; }
+        void Follow(Transform target);
+
+        void Follow(Vector2 position);
 
         float ReferenceSpeed { get; }
 
@@ -17,6 +19,11 @@ namespace m039.Parallax
 
     public class ParallaxManager : MonoBehaviour, IParallaxManager
     {
+        enum FollowMode
+        {
+            Target, Position
+        }
+
         private static ParallaxManager _sInstance;
 
         private static bool _sErrorMessageShown = false;
@@ -65,8 +72,6 @@ namespace m039.Parallax
 
         #region Inspector
 
-        public Transform followTarget;
-
         [Tooltip("Общая скорость для всех объектов, использующие параллакс.")]
         public float referenceSpeed = 2;
 
@@ -86,6 +91,12 @@ namespace m039.Parallax
 
         bool _initialized = false;
 
+        Vector2 _followPosition;
+
+        Transform _followTarget;
+
+        FollowMode _followMode = FollowMode.Target;
+
         public void OnEnable()
         {
             Init(force: true);
@@ -95,6 +106,8 @@ namespace m039.Parallax
         {
             if (!_initialized || force)
             {
+                _followPosition = transform.position; // Just in case.
+
                 _layers.Clear();
                 _layers.AddRange(FindObjectsOfType<ParallaxLayer>());
 
@@ -112,14 +125,6 @@ namespace m039.Parallax
         }
 
         #region IParallaxManager
-
-        Transform IParallaxManager.FollowTarget { 
-
-            get => followTarget;
-
-            set => followTarget = value;
-
-        }
 
         float IParallaxManager.ReferenceSpeed => referenceSpeed;
 
@@ -141,13 +146,25 @@ namespace m039.Parallax
 
         Vector2 IParallaxManager.GetFollowPosition()
         {
-            if (followTarget != null)
+            if (_followMode == FollowMode.Target && _followTarget != null)
             {
-                return followTarget.position;
+                return _followTarget.transform.position;
             } else
             {
-                return transform.position;
+                return _followPosition;
             }
+        }
+
+        void IParallaxManager.Follow(Transform target)
+        {
+            _followTarget = target;
+            _followMode = FollowMode.Target;
+        }
+
+        void IParallaxManager.Follow(Vector2 position)
+        {
+            _followPosition = position;
+            _followMode = FollowMode.Target;
         }
 
         #endregion

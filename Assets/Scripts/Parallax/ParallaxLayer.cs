@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 #if UNITY_EDITOR
@@ -91,17 +90,12 @@ namespace m039.Parallax
 
         void RemoveBackgrounds()
         {
-            void remove(List<GameObject> bgs)
+            foreach (var background in _backgrounds)
             {
-                foreach (var background in bgs)
-                {
-                    Destroy(background);
-                }
-
-                bgs.Clear();
+                Destroy(background);
             }
 
-            remove(_backgrounds);
+            _backgrounds.Clear();
         }
 
         private void Start()

@@ -18,7 +18,7 @@ namespace m039.Parallax
 
         private void Start()
         {
-            ParallaxManager.Instance.FollowTarget = followTarget;
+            ParallaxManager.Instance.Follow(followTarget);
         }
 
         private void LateUpdate()

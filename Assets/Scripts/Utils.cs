@@ -18,7 +18,7 @@ namespace m039.Parallax
 
         public static string Decorate(this string str)
         {
-            return $"<<{ str }>>"; ;
+            return $"<< { str } >>"; ;
         }
     }
 
