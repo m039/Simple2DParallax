@@ -6,14 +6,33 @@ namespace m039.Parallax
 {
     public interface IParallaxManager
     {
+        /// <summary>
+        /// Align all ParallaxLayers with the target.
+        /// </summary>
+        /// <param name="target">is the object which position will be used by ParallaxLayers.</param>
         void Follow(Transform target);
 
+        /// <summary>
+        /// Align all ParallaxLayers with this position.
+        /// </summary>
+        /// <param name="position">this position will be used by ParallaxLayers</param>
         void Follow(Vector2 position);
 
+        /// <summary>
+        /// The default speed which is used by all ParallaxLayers.
+        /// </summary>
         float ReferenceSpeed { get; }
 
+        /// <summary>
+        /// The position to align with.
+        /// </summary>
         Vector2 GetFollowPosition();
 
+        /// <summary>
+        /// Get Z position for ParallaxLayer.
+        /// </summary>
+        /// <param name="depthOrder">the order of a layer by which will be calculated Z position</param>
+        /// <returns>calculated Z position</returns>
         float GetDepth(int depthOrder);
     }
 
@@ -72,7 +91,7 @@ namespace m039.Parallax
 
         #region Inspector
 
-        [Tooltip("Общая скорость для всех объектов, использующие параллакс.")]
+        [Tooltip("Common speed for all ParallaxLayers.")]
         public float referenceSpeed = 2;
 
         #endregion

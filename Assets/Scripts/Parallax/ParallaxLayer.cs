@@ -12,11 +12,13 @@ namespace m039.Parallax
     {
         #region Inspector
 
+        [Tooltip("An order of the ParllaxLayer in Z direction.")]
         public int depthOrder = 0;
 
-        [Tooltip("Скорость с которой движется объект, на котурую влияет еще общая скорость параллакса.")]
+        [Tooltip("Speed used to parallax the background which is also affected by ReferenceSpeed")]
         public float horizontalSpeed = 0f;
 
+        [Tooltip("Repeat the background sprite horizontally.")]
         public bool repeatBackground = true;
 
         #endregion
