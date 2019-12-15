@@ -8,7 +8,7 @@ using UnityEditor;
 
 namespace m039.Parallax
 {
-    [ExecuteInEditMode]
+
     public class ParallaxLayer : MonoBehaviour
     {
         #region Inspector
@@ -18,15 +18,80 @@ namespace m039.Parallax
         [Tooltip("Скорость с которой движется объект, на котурую влияет еще общая скорость параллакса.")]
         public float horizontalSpeed = 0f;
 
+        public bool repeatBackground = true;
+
         #endregion
 
         Vector2 _lastPosition;
 
         float _parallaxOffset;
 
+        List<GameObject> _leftBackgrounds = new List<GameObject>();
+
+        List<GameObject> _rightBackgrounds = new List<GameObject>();
+
         private void OnEnable()
         {
             UpdateDepth();
+            CreateBackgrounds();
+        }
+
+        private void OnDisable()
+        {
+            RemoveBackgrounds();
+        }
+
+        void CreateBackgrounds()
+        {
+            var spriteRenderer = GetComponent<SpriteRenderer>();
+            if (spriteRenderer == null)
+            {
+                return;
+            }
+
+            RemoveBackgrounds();
+
+            void createBackground(List<GameObject> bgs, int offsetIndex)
+            {
+                // Create the object.
+
+                var obj = new GameObject($"Background[{offsetIndex}]".Decorate());
+
+                obj.transform.parent = transform;
+
+                // Init sprite settings.
+
+                var sr = obj.AddComponent<SpriteRenderer>();
+                sr.sprite = spriteRenderer.sprite;
+
+                // Init position.
+
+                var bounds = spriteRenderer.bounds;
+                obj.transform.position = transform.position + offsetIndex * Vector3.right * bounds.size.x;
+
+                // Add to the list.
+
+                bgs.Add(obj);
+            }
+
+            createBackground(_leftBackgrounds, -1);
+            createBackground(_rightBackgrounds, 1);
+        }
+
+        void RemoveBackgrounds()
+        {
+            void remove(List<GameObject> bgs)
+            {
+                foreach (var background in bgs)
+                {
+                    Destroy(background);
+                }
+
+                bgs.Clear();
+            }
+
+            remove(_leftBackgrounds);
+            remove(_rightBackgrounds);
         }
 
         private void Start()

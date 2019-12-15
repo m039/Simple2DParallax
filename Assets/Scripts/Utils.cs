@@ -15,6 +15,11 @@ namespace m039.Parallax
                 guard = true;
             }
         }
+
+        public static string Decorate(this string str)
+        {
+            return $"<<{ str }>>"; ;
+        }
     }
 
 }

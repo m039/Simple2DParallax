@@ -15,7 +15,6 @@ namespace m039.Parallax
         float GetDepth(int depthOrder);
     }
 
-    [ExecuteInEditMode]
     public class ParallaxManager : MonoBehaviour, IParallaxManager
     {
         private static ParallaxManager _sInstance;
@@ -94,7 +93,7 @@ namespace m039.Parallax
 
         void Init(bool force = false)
         {
-            if (_initialized || force)
+            if (!_initialized || force)
             {
                 _layers.Clear();
                 _layers.AddRange(FindObjectsOfType<ParallaxLayer>());
