@@ -119,7 +119,7 @@ namespace m039.Parallax
 
         void UpdateDepth()
         {
-            if (ParallaxManager.Instance == null)
+            if (ParallaxManager.Instance == null || !ParallaxManager.Instance.UseDepth)
                 return;
 
             var position = transform.position;

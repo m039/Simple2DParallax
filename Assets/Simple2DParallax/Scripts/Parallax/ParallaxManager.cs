@@ -34,6 +34,11 @@ namespace m039.Parallax
         /// <param name="depthOrder">the order of a layer by which will be calculated Z position</param>
         /// <returns>calculated Z position</returns>
         float GetDepth(int depthOrder);
+
+        /// <summary>
+        /// Should ParallaxLayers change theirs Z position.
+        /// </summary>
+        bool UseDepth { get; }
     }
 
     public class ParallaxManager : MonoBehaviour, IParallaxManager
@@ -94,13 +99,18 @@ namespace m039.Parallax
         [Tooltip("Common speed for all ParallaxLayers.")]
         public float referenceSpeed = 2;
 
+        [Tooltip("The default Z position, a ParallaxLayer is positioned relative it")]
+        public float referenceZ = 1f;
+
+        [Tooltip("The object from which will be taken referenceZ position")]
+        public Transform referenceZTransform;
+
+        [Tooltip("Should all ParallaxLayer set Z position accordingly depth or leave it unchanged.")]
+        public bool useDepth = true;
+
         #endregion
 
         const float MaxDepth = 1f;
-
-        const float MinDepth = -1f;
-
-        const float CurrentDepth = 0f;
 
         float _currentMaxDepthOrder;
 
@@ -115,6 +125,20 @@ namespace m039.Parallax
         Transform _followTarget;
 
         FollowMode _followMode = FollowMode.Target;
+
+        protected float ReferenceZ
+        {
+            get
+            {
+                if (referenceZTransform != null)
+                {
+                    return referenceZTransform.transform.position.z;
+                } else
+                {
+                    return referenceZ;
+                }
+            }
+        }
 
         public void OnEnable()
         {
@@ -147,19 +171,21 @@ namespace m039.Parallax
 
         float IParallaxManager.ReferenceSpeed => referenceSpeed;
 
+        bool IParallaxManager.UseDepth => useDepth;
+
         float IParallaxManager.GetDepth(int depthOrder)
         {
             Init();
 
             if (depthOrder > 0 && _currentMaxDepthOrder != 0)
             {
-                return CurrentDepth + (float)depthOrder / Mathf.Abs(_currentMaxDepthOrder) * MaxDepth;
+                return ReferenceZ + (float)depthOrder / Mathf.Abs(_currentMaxDepthOrder) * MaxDepth;
             } else if (depthOrder < 0 && _currentMinDepthOrder != 0)
             {
-                return CurrentDepth + (float)depthOrder / Mathf.Abs(_currentMinDepthOrder) * MinDepth;
+                return ReferenceZ + (float)depthOrder / Mathf.Abs(_currentMinDepthOrder) * MaxDepth;
             } else
             {
-                return CurrentDepth;
+                return ReferenceZ;
             }
         }
 
