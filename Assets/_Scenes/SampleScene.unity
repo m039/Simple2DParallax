@@ -494,7 +494,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   depthOrder: 2
   horizontalSpeed: 0.05
-  repeatBackground: 0
+  repeatBackground: 1
 --- !u!1 &1078987532
 GameObject:
   m_ObjectHideFlags: 0
@@ -541,7 +541,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   depthOrder: 3
   horizontalSpeed: 0.01
-  repeatBackground: 0
+  repeatBackground: 1
 --- !u!212 &1078987535
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -779,7 +779,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   depthOrder: 1
   horizontalSpeed: 0.1
-  repeatBackground: 0
+  repeatBackground: 1
 --- !u!1 &1866608693
 GameObject:
   m_ObjectHideFlags: 0

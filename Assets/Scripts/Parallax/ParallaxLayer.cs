@@ -26,19 +26,24 @@ namespace m039.Parallax
 
         float _parallaxOffset;
 
-        List<GameObject> _leftBackgrounds = new List<GameObject>();
-
-        List<GameObject> _rightBackgrounds = new List<GameObject>();
+        List<GameObject> _backgrounds = new List<GameObject>();
 
         private void OnEnable()
         {
             UpdateDepth();
-            CreateBackgrounds();
+
+            if (repeatBackground)
+            {
+                CreateBackgrounds();
+            }
         }
 
         private void OnDisable()
         {
-            RemoveBackgrounds();
+            if (repeatBackground)
+            {
+                RemoveBackgrounds();
+            }
         }
 
         void CreateBackgrounds()
@@ -51,7 +56,7 @@ namespace m039.Parallax
 
             RemoveBackgrounds();
 
-            void createBackground(List<GameObject> bgs, int offsetIndex)
+            void createBackground(int offsetIndex)
             {
                 // Create the object.
 
@@ -71,11 +76,17 @@ namespace m039.Parallax
 
                 // Add to the list.
 
-                bgs.Add(obj);
+                _backgrounds.Add(obj);
             }
 
-            createBackground(_leftBackgrounds, -1);
-            createBackground(_rightBackgrounds, 1);
+            var width = Camera.main.orthographicSize * Camera.main.aspect;
+            var times = Mathf.CeilToInt(width / spriteRenderer.bounds.size.x) + 1;
+
+            for (int i = 1; i < times; i++)
+            {
+                createBackground(-i);
+                createBackground(i);
+            }
         }
 
         void RemoveBackgrounds()
@@ -90,8 +101,7 @@ namespace m039.Parallax
                 bgs.Clear();
             }
 
-            remove(_leftBackgrounds);
-            remove(_rightBackgrounds);
+            remove(_backgrounds);
         }
 
         private void Start()
@@ -108,6 +118,7 @@ namespace m039.Parallax
         private void LateUpdate()
         {
             FollowPosition();
+            UpdateBackgrounds();
         }
 
         void UpdateDepth()
@@ -141,6 +152,21 @@ namespace m039.Parallax
             p.x = followPosition.x + _parallaxOffset;
 
             transform.position = p;
+        }
+
+        void UpdateBackgrounds()
+        {
+            var spriteRenderer = GetComponent<SpriteRenderer>();
+            if (spriteRenderer == null)
+            {
+                return;
+            }
+
+            var width = spriteRenderer.bounds.size.x;
+            if (width == 0)
+                return;
+
+            _parallaxOffset %= width;
         }
     }
 
