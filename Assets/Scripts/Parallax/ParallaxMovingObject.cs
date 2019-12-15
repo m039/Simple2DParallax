@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace LH
+namespace m039.Parallax
 {
 
 	public class ParallaxMovingObject : ParallaxBaseBackground
