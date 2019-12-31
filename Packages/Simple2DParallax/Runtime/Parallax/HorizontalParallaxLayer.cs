@@ -8,7 +8,7 @@ using UnityEditor;
 namespace m039.Parallax
 {
 
-	public class ParallaxLayer : MonoBehaviour
+	public class HorizontalParallaxLayer : MonoBehaviour
 	{
 		#region Inspector
 
@@ -168,7 +168,7 @@ namespace m039.Parallax
 
 #if UNITY_EDITOR
 
-	[CustomEditor(typeof(ParallaxLayer), true)]
+	[CustomEditor(typeof(HorizontalParallaxLayer), true)]
 	public class ParallaxLayerEditor : Editor
 	{
 		GUIStyle _errorLabelStyle;
@@ -184,14 +184,14 @@ namespace m039.Parallax
 
 		public override void OnInspectorGUI()
 		{
-			var t = (ParallaxLayer)target;
+			var t = (HorizontalParallaxLayer)target;
 
 			if (t.GetComponent<SpriteRenderer>() == null)
 			{
 				EditorGUILayout.Space();
 				EditorGUILayout.LabelField(
 					$"<color=maroon>There is should be {nameof(SpriteRenderer)} attached " +
-					$"for {nameof(ParallaxLayer)} to work.</color>",
+					$"for {nameof(HorizontalParallaxLayer)} to work.</color>",
 					_errorLabelStyle);
 				EditorGUILayout.Space();
 			}
