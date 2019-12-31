@@ -1,0 +1,3 @@
+[submodule "Packages/CommonUnityLibrary"]
+	path = Packages/CommonUnityLibrary
+	url = https://github.com/m039/CommonUnityLibrary
