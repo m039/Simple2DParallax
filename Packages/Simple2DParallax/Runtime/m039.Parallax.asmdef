@@ -1,3 +1,15 @@
-﻿{
-	"name": "m039.Parallax"
+{
+    "name": "m039.Parallax",
+    "references": [
+        "GUID:c00d337cb7c72ff448e65f72e45aa009"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }

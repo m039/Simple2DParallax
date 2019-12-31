@@ -1,16 +1,19 @@
 {
-  "name": "com.m039.parallax",
-  "version": "1.2.3",
-  "displayName": "Simple 2D Parallax",
-  "description": "A basic parallax effect for Unity 2D",
-  "unity": "2019.1",
- "keywords": [
-    "parallax",
-    "2d",
-    "effect"
-  ],
-  "author": {
-    "name": "Dmitry Mozgin",
-    "url": "http://twitter.com/m0391n"
-  }
+	"name": "com.m039.parallax",
+	"version": "0.0.1",
+	"displayName": "Simple 2D Parallax",
+	"description": "A basic parallax effect for Unity 2D",
+	"unity": "2019.1",
+	"keywords": [
+		"parallax",
+		"2d",
+		"effect"
+	],
+	"author": {
+		"name": "Dmitry Mozgin",
+		"url": "http://twitter.com/m0391n"
+	},
+	"dependencies": {
+		"com.m039.common-unity-library": "0.0.2"
+	}
 }
