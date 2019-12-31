@@ -8,13 +8,11 @@ using UnityEditor;
 namespace m039.Parallax
 {
 
-	public class HorizontalParallaxLayer : MonoBehaviour
+	public class HorizontalParallaxLayer : BaseParallaxLayer
 	{
 		#region Inspector
 
-		[Tooltip("An order of the ParllaxLayer in Z direction.")]
-		public int depthOrder = 0;
-
+		[Header("Horizontal Parallax Settings")]
 		[Tooltip("Speed used to parallax the background which is also affected by ReferenceSpeed")]
 		public float horizontalSpeed = 0f;
 

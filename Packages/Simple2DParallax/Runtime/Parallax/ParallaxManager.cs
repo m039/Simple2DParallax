@@ -125,7 +125,7 @@ namespace m039.Parallax
 
 		float _currentMinDepthOrder;
 
-		readonly List<HorizontalParallaxLayer> _layers = new List<HorizontalParallaxLayer>();
+		readonly List<BaseParallaxLayer> _layers = new List<BaseParallaxLayer>();
 
 		bool _initialized = false;
 

@@ -5,7 +5,7 @@ using UnityEngine;
 namespace m039.Parallax
 {
 
-    public class BasicParallaxExample : MonoBehaviour
+    public class ForestParallaxExample : MonoBehaviour
     {
 
         #region Inspector
