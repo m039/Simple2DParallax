@@ -144,6 +144,8 @@ namespace m039.Parallax
 			{
 				var spriteCenter = spriteRenderer.transform.position;
 
+				spriteCenter.z = 0;
+
 				// Check all coners.
 
 				var topLeftCorner = spriteCenter -
@@ -179,9 +181,12 @@ namespace m039.Parallax
 				while (true)
 				{
 					var spriteRenderer = createOrUpdateSprite(x--, yIndex);
+					var spritePosition = spriteRenderer.transform.position;
 
-					topRay = new Ray(spriteRenderer.transform.position + transform.up * mainSpriteHalfSize.y, -transform.right);
-					bottomRay = new Ray(spriteRenderer.transform.position - transform.up * mainSpriteHalfSize.y, -transform.right);
+					spritePosition.z = 0;
+
+					topRay = new Ray(spritePosition + transform.up * mainSpriteHalfSize.y, -transform.right);
+					bottomRay = new Ray(spritePosition - transform.up * mainSpriteHalfSize.y, -transform.right);
 
 					if (!IsSpriteWithinBounds(spriteRenderer) && !cameraBounds.IntersectRay(topRay) && !cameraBounds.IntersectRay(bottomRay))
 					{
@@ -209,9 +214,12 @@ namespace m039.Parallax
 				while (true)
 				{
 					var spriteRenderer = createOrUpdateSprite(x++, yIndex);
+					var spritePosition = spriteRenderer.transform.position;
 
-					topRay = new Ray(spriteRenderer.transform.position + transform.up * mainSpriteHalfSize.y, transform.right);
-					bottomRay = new Ray(spriteRenderer.transform.position - transform.up * mainSpriteHalfSize.y, transform.right);
+					spritePosition.z = 0;
+
+					topRay = new Ray(spritePosition + transform.up * mainSpriteHalfSize.y, transform.right);
+					bottomRay = new Ray(spritePosition - transform.up * mainSpriteHalfSize.y, transform.right);
 
 					if (!IsSpriteWithinBounds(spriteRenderer) && !cameraBounds.IntersectRay(topRay) && !cameraBounds.IntersectRay(bottomRay))
 					{
