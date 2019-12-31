@@ -57,8 +57,10 @@ namespace m039.Parallax
 			_invalidate = true;
 		}
 
-		private void OnEnable()
+		protected override void OnEnable()
 		{
+			base.OnEnable();
+
 			_spriteGroup = transform.Find(SpriteGroupName);
 
 			// Create an object for holding sprites.
@@ -82,8 +84,10 @@ namespace m039.Parallax
 			Regenerate();
 		}
 
-		private void LateUpdate()
+		protected override void LateUpdate()
 		{
+			base.LateUpdate();
+
 			if (_invalidate || _lastAspectRatio != Camera.main.aspect || transform.hasChanged)
 			{
 				Regenerate();

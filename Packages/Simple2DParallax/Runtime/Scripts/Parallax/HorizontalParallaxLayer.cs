@@ -21,15 +21,15 @@ namespace m039.Parallax
 
 		#endregion
 
-		Vector2 _lastPosition;
-
-		float _parallaxOffset;
-
 		List<GameObject> _backgrounds = new List<GameObject>();
 
-		private void OnEnable()
+		protected override Vector2 Direction => Vector2.right;
+
+		protected override float Speed => horizontalSpeed;
+
+		protected override void OnEnable()
 		{
-			UpdateDepth();
+			base.OnEnable();
 
 			if (repeatBackground)
 			{
@@ -37,8 +37,10 @@ namespace m039.Parallax
 			}
 		}
 
-		private void OnDisable()
+		protected override void OnDisable()
 		{
+			base.OnDisable();
+
 			if (repeatBackground)
 			{
 				RemoveBackgrounds();
@@ -98,54 +100,11 @@ namespace m039.Parallax
 			_backgrounds.Clear();
 		}
 
-		private void Start()
+		protected override void LateUpdate()
 		{
-			if (ParallaxManager.Instance == null)
-				return;
+			base.LateUpdate();
 
-			_parallaxOffset = 0.0f;
-			_lastPosition = Vector2.zero;
-
-			FollowPosition();
-		}
-
-		private void LateUpdate()
-		{
-			FollowPosition();
 			UpdateBackgrounds();
-		}
-
-		void UpdateDepth()
-		{
-			if (ParallaxManager.Instance == null || !ParallaxManager.Instance.UseDepth)
-				return;
-
-			var position = transform.position;
-
-			position.z = ParallaxManager.Instance.GetDepth(depthOrder);
-
-			transform.position = position;
-		}
-
-		void FollowPosition()
-		{
-			if (ParallaxManager.Instance == null)
-				return;
-
-			var followPosition = ParallaxManager.Instance.GetFollowPosition();
-
-			// Update position of the object.
-
-			var deltaX = followPosition.x - _lastPosition.x;
-
-			_lastPosition = followPosition;
-			_parallaxOffset += deltaX * ParallaxManager.Instance.ReferenceSpeed * horizontalSpeed;
-
-			var p = transform.position;
-
-			p.x = followPosition.x + _parallaxOffset;
-
-			transform.position = p;
 		}
 
 		void UpdateBackgrounds()
@@ -160,7 +119,11 @@ namespace m039.Parallax
 			if (width == 0)
 				return;
 
-			_parallaxOffset %= width;
+			var offset = ParallaxOffset;
+
+			offset.x %= width;
+
+			ParallaxOffset = offset;
 		}
 	}
 
