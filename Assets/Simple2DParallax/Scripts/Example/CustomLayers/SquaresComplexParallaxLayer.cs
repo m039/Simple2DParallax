@@ -8,16 +8,10 @@ namespace m039.Parallax
 
 	[ExecuteInEditMode]
 	[RequireComponent(typeof(SpriteRenderer))]
-	public class SquaresComplexParallaxLayer : BaseParallaxLayer
+	public class SquaresComplexParallaxLayer : ComplexParallaxLayer
 	{
 
 		#region Inspector
-
-		[Header("Squares Parallax Settings")]
-		[Range(0f, 360f)]
-		public float angle;
-
-		public float speed;
 
 		public float horizontalSpacing = 0;
 
@@ -51,6 +45,8 @@ namespace m039.Parallax
 		bool _invalidate = false;
 
 		Transform _spriteGroup;
+
+		bool _scheduleRegenerate = false;
 
 		void OnValidate()
 		{
@@ -88,13 +84,21 @@ namespace m039.Parallax
 		{
 			base.LateUpdate();
 
-			if (_invalidate || _lastAspectRatio != Camera.main.aspect || transform.hasChanged)
+			if (_invalidate || _lastAspectRatio != Camera.main.aspect || transform.hasChanged || _scheduleRegenerate)
 			{
 				Regenerate();
 				_invalidate = false;
 				_lastAspectRatio = Camera.main.aspect;
 				transform.hasChanged = false;
+				_scheduleRegenerate = false;
 			}
+		}
+
+		protected override void OnParallaxOffsetChanged()
+		{
+			base.OnParallaxOffsetChanged();
+
+			_scheduleRegenerate = true;
 		}
 
 		void Regenerate()
@@ -105,40 +109,9 @@ namespace m039.Parallax
 				sprite.SetActive(false);
 			}
 
-			var mainSpriteCenter = transform.position;
 			var mainSpriteSize = Matrix4x4.Scale(transform.lossyScale) * SpriteRenderer.sprite.bounds.size;
 			var mainSpriteHalfSize = mainSpriteSize / 2;
 			var cameraBounds = CameraUtils.GetMainCameraBounds();
-
-			SpriteRenderer createOrUpdateSprite(int xIndex, int yIndex)
-			{
-				var obj = _sprites.Find((o) => o.name.Equals(FreeName));
-
-				if (obj == null)
-				{
-					obj = new GameObject();
-					obj.transform.SetParent(_spriteGroup, worldPositionStays: false);
-					obj.AddComponent<SpriteRenderer>();
-
-					_sprites.Add(obj);
-				}
-
-				obj.name = $"Sprite@({xIndex}, {yIndex})".Decorate();
-				obj.SetActive(true);
-
-				var spriteRenderer = obj.GetComponent<SpriteRenderer>();
-				spriteRenderer.sprite = SpriteRenderer.sprite;
-				spriteRenderer.color = SpriteRenderer.color;
-
-				var position = mainSpriteCenter;
-
-				position += xIndex * transform.right * (mainSpriteSize.x + horizontalSpacing);
-				position += yIndex * transform.up * (mainSpriteSize.y + verticalSpacing);
-
-				obj.transform.position = position;
-
-				return spriteRenderer;
-			}
 
 			bool IsSpriteWithinBounds(SpriteRenderer spriteRenderer)
 			{
@@ -168,6 +141,88 @@ namespace m039.Parallax
 					cameraBounds.Contains(topRightCorner) ||
 					cameraBounds.Contains(bottomLeftCorner) ||
 					cameraBounds.Contains(bottomRightCorner);
+			}
+
+			Vector3 getSpritePosition(Vector3 center, int xIndex, int yIndex)
+			{
+				var position = center;
+
+				position += xIndex * transform.right * (mainSpriteSize.x + horizontalSpacing);
+				position += yIndex * transform.up * (mainSpriteSize.y + verticalSpacing);
+
+				return position;
+			}
+
+			if (!IsSpriteWithinBounds(SpriteRenderer))
+			{
+				var spriteCenter = (Vector2)transform.position;
+				var oppositeMovingDirectionRay = new Ray(spriteCenter, -MovingDirection);
+				var leftPlane = new Plane(Vector3.right, cameraBounds.min);
+				var topPlane = new Plane(Vector3.down, cameraBounds.max);
+				var rightPlane = new Plane(Vector3.left, cameraBounds.max);
+				var bottomPlane = new Plane(Vector3.up, cameraBounds.min);
+
+				void clampSpritePosition(Vector2 direction, Plane planeOuter, Plane innerPlane, System.Func<int, Vector3> getPosition)
+				{
+					var ray = new Ray(spriteCenter, direction);
+
+					if (planeOuter.Raycast(ray, out _) &&
+						planeOuter.Raycast(oppositeMovingDirectionRay, out _) &&
+						Vector3.Dot(ray.direction, oppositeMovingDirectionRay.direction) > 0)
+					{
+						int i = 1;
+
+						while (true)
+						{
+							ray = new Ray(getPosition(i++), direction);
+
+							if (!innerPlane.Raycast(ray, out _))
+							{
+								ParallaxOffset += (Vector2)ray.origin - spriteCenter;
+								break;
+							}
+						}
+					}
+				}
+
+				// Bottom to up
+				clampSpritePosition(transform.up, bottomPlane, topPlane, (y) => getSpritePosition(spriteCenter, 0, y));
+
+				// Up to bottom
+				clampSpritePosition(-transform.up, topPlane, bottomPlane, (y) => getSpritePosition(spriteCenter, 0, -y));
+
+				// Left to right
+				clampSpritePosition(transform.right, leftPlane, rightPlane, (x) => getSpritePosition(spriteCenter, x, 0));
+
+				// Right to left
+				clampSpritePosition(-transform.right, rightPlane, leftPlane, (x) => getSpritePosition(spriteCenter, -x, 0));
+			}
+
+			var mainSpriteCenter = transform.position;
+
+			SpriteRenderer createOrUpdateSprite(int xIndex, int yIndex)
+			{
+				var obj = _sprites.Find((o) => o.name.Equals(FreeName));
+
+				if (obj == null)
+				{
+					obj = new GameObject();
+					obj.transform.SetParent(_spriteGroup, worldPositionStays: false);
+					obj.AddComponent<SpriteRenderer>();
+
+					_sprites.Add(obj);
+				}
+
+				obj.name = $"Sprite@({xIndex}, {yIndex})".Decorate();
+				obj.SetActive(true);
+
+				var spriteRenderer = obj.GetComponent<SpriteRenderer>();
+				spriteRenderer.sprite = SpriteRenderer.sprite;
+				spriteRenderer.color = SpriteRenderer.color;
+
+				obj.transform.position = getSpritePosition(mainSpriteCenter, xIndex, yIndex);
+
+				return spriteRenderer;
 			}
 
 			bool createRow(int yIndex, bool excludeCenter)

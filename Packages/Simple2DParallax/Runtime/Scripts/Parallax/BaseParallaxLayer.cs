@@ -50,6 +50,8 @@ namespace m039.Parallax
 			}
 		}
 
+		protected Vector2 MovingDirection => Direction.normalized * Mathf.Sign(Speed);
+
 		protected virtual void OnEnable()
 		{
 			UpdateDepth();
@@ -97,9 +99,9 @@ namespace m039.Parallax
 
 			// Update position of the object.
 
-			var delta = followPosition - _lastPosition;
+			var delta = (followPosition - _lastPosition).magnitude;
 
-			_parallaxOffset += delta * ParallaxManager.Instance.ReferenceSpeed * Speed * Direction.normalized;
+			_parallaxOffset += delta * ParallaxManager.Instance.ReferenceSpeed * Mathf.Abs(Speed) * MovingDirection;
 			_lastPosition = followPosition;
 
 			// Set the position.
@@ -109,6 +111,13 @@ namespace m039.Parallax
 			position.z = transform.position.z;
 
 			transform.position = position;
+
+			OnParallaxOffsetChanged();
+		}
+
+		protected virtual void OnParallaxOffsetChanged()
+		{
+
 		}
 
 	}

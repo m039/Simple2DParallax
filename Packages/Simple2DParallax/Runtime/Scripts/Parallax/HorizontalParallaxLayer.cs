@@ -100,9 +100,9 @@ namespace m039.Parallax
 			_backgrounds.Clear();
 		}
 
-		protected override void LateUpdate()
+		protected override void OnParallaxOffsetChanged()
 		{
-			base.LateUpdate();
+			base.OnParallaxOffsetChanged();
 
 			UpdateBackgrounds();
 		}
