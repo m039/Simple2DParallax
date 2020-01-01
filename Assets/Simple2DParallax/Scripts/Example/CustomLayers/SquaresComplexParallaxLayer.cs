@@ -156,18 +156,27 @@ namespace m039.Parallax
 			if (!IsSpriteWithinBounds(SpriteRenderer))
 			{
 				var spriteCenter = (Vector2)transform.position;
+				var movingDirectionRay = new Ray(spriteCenter, MovingDirection);
 				var oppositeMovingDirectionRay = new Ray(spriteCenter, -MovingDirection);
 				var leftPlane = new Plane(Vector3.right, cameraBounds.min);
 				var topPlane = new Plane(Vector3.down, cameraBounds.max);
 				var rightPlane = new Plane(Vector3.left, cameraBounds.max);
 				var bottomPlane = new Plane(Vector3.up, cameraBounds.min);
 
-				void clampSpritePosition(Vector2 direction, Plane planeOuter, Plane innerPlane, System.Func<int, Vector3> getPosition)
+				void clampSpritePosition(Vector2 direction, System.Func<int, Vector3> getPosition)
 				{
 					var ray = new Ray(spriteCenter, direction);
+					var bounds = cameraBounds;
+					var size = mainSpriteSize;
 
-					if (planeOuter.Raycast(ray, out _) &&
-						planeOuter.Raycast(oppositeMovingDirectionRay, out _) &&
+					size.x += horizontalSpacing;
+					size.y += verticalSpacing;
+
+					bounds.Expand(size * 2);
+
+					if (!cameraBounds.IntersectRay(movingDirectionRay) &&
+						bounds.IntersectRay(ray) &&
+						bounds.IntersectRay(oppositeMovingDirectionRay) &&
 						Vector3.Dot(ray.direction, oppositeMovingDirectionRay.direction) > 0)
 					{
 						int i = 1;
@@ -176,7 +185,7 @@ namespace m039.Parallax
 						{
 							ray = new Ray(getPosition(i++), direction);
 
-							if (!innerPlane.Raycast(ray, out _))
+							if (!bounds.IntersectRay(ray))
 							{
 								ParallaxOffset += (Vector2)ray.origin - spriteCenter;
 								break;
@@ -186,16 +195,16 @@ namespace m039.Parallax
 				}
 
 				// Bottom to up
-				clampSpritePosition(transform.up, bottomPlane, topPlane, (y) => getSpritePosition(spriteCenter, 0, y));
+				clampSpritePosition(transform.up, (y) => getSpritePosition(spriteCenter, 0, y));
 
 				// Up to bottom
-				clampSpritePosition(-transform.up, topPlane, bottomPlane, (y) => getSpritePosition(spriteCenter, 0, -y));
+				clampSpritePosition(-transform.up, (y) => getSpritePosition(spriteCenter, 0, -y));
 
 				// Left to right
-				clampSpritePosition(transform.right, leftPlane, rightPlane, (x) => getSpritePosition(spriteCenter, x, 0));
+				clampSpritePosition(transform.right, (x) => getSpritePosition(spriteCenter, x, 0));
 
 				// Right to left
-				clampSpritePosition(-transform.right, rightPlane, leftPlane, (x) => getSpritePosition(spriteCenter, -x, 0));
+				clampSpritePosition(-transform.right, (x) => getSpritePosition(spriteCenter, -x, 0));
 			}
 
 			var mainSpriteCenter = transform.position;
@@ -293,6 +302,8 @@ namespace m039.Parallax
 
 				// Bottom.
 
+				createRow(y--, false);
+
 				while (createRow(y--, false))
 				{
 				}
@@ -304,6 +315,8 @@ namespace m039.Parallax
 				// Top
 
 				y = 1;
+
+				createRow(y++, false);
 
 				while (createRow(y++, false))
 				{
