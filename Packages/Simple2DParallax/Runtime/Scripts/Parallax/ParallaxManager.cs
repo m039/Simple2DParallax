@@ -162,7 +162,7 @@ namespace m039.Parallax
 				_followPosition = transform.position; // Just in case.
 
 				_layers.Clear();
-				_layers.AddRange(FindObjectsOfType<HorizontalParallaxLayer>());
+				_layers.AddRange(FindObjectsOfType<BaseParallaxLayer>());
 
 				_currentMaxDepthOrder = 0;
 				_currentMinDepthOrder = 0;

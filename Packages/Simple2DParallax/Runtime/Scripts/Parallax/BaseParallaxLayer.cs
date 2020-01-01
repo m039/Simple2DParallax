@@ -67,15 +67,19 @@ namespace m039.Parallax
 			if (ParallaxManager.Instance == null)
 				return;
 
-			_parallaxOffset = Vector2.zero;
+			_parallaxOffset = (Vector2)transform.position - ParallaxManager.Instance.GetFollowPosition();
 			_lastPosition = Vector2.zero;
 
+			UpdateDepth();
 			FollowPosition();
 		}
 
 		protected virtual void LateUpdate()
 		{
-			FollowPosition();
+			if (Application.isPlaying)
+			{
+				FollowPosition();
+			}
 		}
 
 		void UpdateDepth()
