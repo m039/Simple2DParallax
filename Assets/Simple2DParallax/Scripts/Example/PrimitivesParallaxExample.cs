@@ -16,7 +16,7 @@ namespace m039.Parallax
 
 		#endregion
 
-		private void Start()
+		private void Awake()
 		{
 			ParallaxManager.Instance.Follow(followTarget);
 		}
