@@ -5,7 +5,7 @@ A basic parallax effect for Unity 2D.
 
 ## Development Branches
 
-Work in progress images from [any_directional_parallax](/tree/feature/any_directional_parallax) branch:
+Work in progress images from [any_directional_parallax](https://github.com/m039/Simple2DParallax/tree/feature/any_directional_parallax) branch:
 
 [![Demo](https://imgur.com/jS60s7B.gif)](https://youtu.be/WxxbykM_DyA)
 
