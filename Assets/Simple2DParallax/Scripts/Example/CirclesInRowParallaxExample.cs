@@ -5,9 +5,8 @@ using UnityEngine;
 namespace m039.Parallax
 {
 
-	public class ForestParallaxExample : MonoBehaviour
+	public class CirclesInRowParallaxExample : MonoBehaviour
 	{
-
 		#region Inspector
 
 		public Transform followTarget;
@@ -28,7 +27,6 @@ namespace m039.Parallax
 
 			followTarget.position += Vector3.right * targetSpeed * Time.deltaTime;
 		}
-
 	}
 
 }
