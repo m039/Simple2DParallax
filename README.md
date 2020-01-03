@@ -5,9 +5,10 @@ A basic parallax effect for Unity 2D.
 
 ## Development Branches
 
-Work in progress images from [any_directional_parallax](https://github.com/m039/Simple2DParallax/tree/feature/any_directional_parallax) branch:
+Work in progress images (clickable) from [any_directional_parallax](https://github.com/m039/Simple2DParallax/tree/feature/any_directional_parallax) branch:
 
-[![Demo](https://imgur.com/jS60s7B.gif)](https://youtu.be/WxxbykM_DyA)
+[![Demo1](https://imgur.com/jS60s7B.gif)](https://youtu.be/WxxbykM_DyA)
+[![Demo2](https://i.imgur.com/vAz8cxEb.gif)](https://youtu.be/-sKVzJys87A)
 
 ## Information
 This library only supports horizontal parallax in a very basic form. You can look at how it works in the [Example](Assets/Simple2DParallax/Scripts/Example) section.
