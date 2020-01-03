@@ -11,7 +11,6 @@ namespace m039.Parallax
 
 		#region Inspector
 
-		[Header("Squares Parallax Settings")]
 		[Range(-180f, 180f)]
 		public float angle;
 
