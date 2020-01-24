@@ -12,8 +12,5 @@
 	"author": {
 		"name": "Dmitry Mozgin",
 		"url": "http://twitter.com/m0391n"
-	},
-	"dependencies": {
-		"com.m039.common-unity-library": "0.0.2"
 	}
 }
