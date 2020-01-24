@@ -1,9 +1,20 @@
 # Simple2DParallax
 A basic parallax effect for Unity 2D.
 
-A demo (the [art](https://aethrall.itch.io/demon-woods-parallax-background) by [Aethrall](https://twitter.com/Aethrall)):
+A simple demo:
 
 [![Demo](https://i.imgur.com/mgZj8sH.gif)](https://youtu.be/Im8eCi0pSss)
 
-## Information
-This library only supports horizontal parallax in a very basic form. You can look at how it works in the [Example](Assets/Simple2DParallax/Scripts/Example) section.
+## Examples
+
+You can find examples in [Simple2DParallaxExamples~](Simple2DParallaxExamples~)
+
+## Installation
+
+Simple2DParallax uses [Unity's Package Manager](https://docs.unity3d.com/Manual/CustomPackages.html). In order to use it you'll need to add the following lines to your Packages/manifest.json file:
+
+    "dependencies": {
+      "com.m039.parallax": "https://github.com/m039/Simple2DParallax.git"
+    }
+
+You can read more about how to add a package to your project in the [manual](https://docs.unity3d.com/Manual/upm-dependencies.html).
